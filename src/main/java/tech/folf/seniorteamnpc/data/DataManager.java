@@ -1,10 +1,11 @@
-package tech.folf.seniorteamnpc;
+package tech.folf.seniorteamnpc.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import tech.folf.seniorteamnpc.SeniorTeamNPC;
 import tech.folf.seniorteamnpc.npc.NPC;
 
 import java.io.File;
