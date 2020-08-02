@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'tech.folf'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://repo.dmulloy2.net/nexus/repository/public/" }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly 'org.spigotmc:spigot:1.16.1-R0.1-SNAPSHOT'
+    compileOnly files('dependencies/ProtocolLib.jar') // I love when devs don't upload their stuff on repos
+}

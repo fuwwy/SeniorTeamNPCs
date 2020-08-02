@@ -1,0 +1,10 @@
+name: SeniorTeamNPC
+main: tech.folf.seniorteamnpc.SeniorTeamNPC
+author: Checkium
+version: 1.0
+depend:
+  - ProtocolLib
+commands:
+  createnpc:
+  crouch:
+  attack:
