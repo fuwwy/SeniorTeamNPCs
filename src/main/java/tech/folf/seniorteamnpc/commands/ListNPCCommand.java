@@ -31,7 +31,7 @@ public class ListNPCCommand implements CommandExecutor {
                 Location playerLocation = ((Player) commandSender).getLocation();
                 npcList.sort(Comparator.comparingDouble(o -> o.getLocation().distanceSquared(playerLocation)));
             } else {
-                npcList.sort(Comparator.comparing(NPC::getName));
+                npcList.sort(Comparator.comparing(npc -> npc.getName().toLowerCase()));
             }
 
             commandSender.sendMessage(npcList.stream().map(npc -> (npcList.indexOf(npc) + 1) + "# " + npc.getName()).collect(Collectors.joining("\n")));
