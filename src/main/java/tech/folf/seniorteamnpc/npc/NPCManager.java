@@ -1,13 +1,9 @@
 package tech.folf.seniorteamnpc.npc;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import tech.folf.seniorteamnpc.SeniorTeamNPC;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class NPCManager {
@@ -19,8 +15,8 @@ public class NPCManager {
         return npc;
     }
 
-    public boolean deleteNpc(String name) {
-        return npcList.removeIf(npc -> npc.getName().equals(name));
+    public boolean deleteNpc(NPC npc) {
+        return npcList.remove(npc);
     }
 
     public NPC get(String name) {

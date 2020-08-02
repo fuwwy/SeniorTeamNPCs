@@ -8,3 +8,6 @@ commands:
   createnpc:
   crouch:
   attack:
+  npcinfo:
+  listnpcs:
+  deletenpc:

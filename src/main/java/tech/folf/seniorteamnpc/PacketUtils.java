@@ -16,7 +16,7 @@ import java.util.Collections;
 
 public class PacketUtils {
 
-    public static void sendPlayerList(Player player, NPC npc) {
+    public static void sendPlayerInfo(Player player, NPC npc) {
         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.PLAYER_INFO);
         WrappedGameProfile wrappedGameProfile = WrappedGameProfile.fromHandle(npc.getGameProfile());
         PlayerInfoData playerInfoData = new PlayerInfoData(wrappedGameProfile, 1,
