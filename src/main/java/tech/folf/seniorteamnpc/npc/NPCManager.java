@@ -1,22 +1,53 @@
 package tech.folf.seniorteamnpc.npc;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import tech.folf.seniorteamnpc.SeniorTeamNPC;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NPCManager {
-    public List<NPC> npcList = new ArrayList<>();
+    private final List<NPC> npcList = new ArrayList<>();
 
-    public NPC createNpc(Location location, String name) {
-        NPC npc = new NPC(name, location);
-        npcList.add(npc);
-        return npc;
+    public NPCManager() {
+       new BukkitRunnable() {
+           @Override
+           public void run() {
+               for (NPC npc : npcList) {
+                   for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                       if (!npc.getLocation().getWorld().equals(onlinePlayer.getLocation().getWorld())) {
+                           if (npc.getInRadius().contains(onlinePlayer)) npc.destroyToPlayer(onlinePlayer);
+                           continue;
+                       }
+
+                       if (npc.getLocation().distanceSquared(onlinePlayer.getLocation()) < 3600) {
+                           if (!npc.getInRadius().contains(onlinePlayer)) {
+                               npc.spawnToPlayer(onlinePlayer);
+                           }
+                       } else {
+                           if (npc.getInRadius().contains(onlinePlayer)) {
+                               npc.destroyToPlayer(onlinePlayer);
+                           }
+                       }
+                   }
+               }
+           }
+       }.runTaskTimer(SeniorTeamNPC.getInstance(), 0L, 20L);
     }
 
-    public boolean deleteNpc(NPC npc) {
-        return npcList.remove(npc);
+    public void createNpc(Location location, String name) {
+        NPC npc = new NPC(name, location);
+        npcList.add(npc);
+    }
+
+    public void deleteNpc(NPC npc) {
+        npcList.remove(npc);
+        for (Player inRadius : npc.getInRadius()) {
+            npc.destroyToPlayer(inRadius);
+        }
     }
 
     public NPC get(String name) {

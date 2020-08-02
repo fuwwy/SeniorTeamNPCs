@@ -16,7 +16,7 @@ public class CreateNPCCommand implements CommandExecutor {
             commandSender.sendMessage(ChatColor.RED + "No permission.");
         else if (strings.length < 1) commandSender.sendMessage(ChatColor.RED + "Missing arguments");
         else {
-            SeniorTeamNPC.getNpcManager().createNpc(((Player) commandSender).getLocation(), strings[0]).spawnToPlayer((Player) commandSender);
+            SeniorTeamNPC.getNpcManager().createNpc(((Player) commandSender).getLocation(), strings[0]);
             commandSender.sendMessage(ChatColor.GREEN + "Created NPC");
         }
         return true;

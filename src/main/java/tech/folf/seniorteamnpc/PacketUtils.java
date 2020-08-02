@@ -5,7 +5,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.*;
-import net.minecraft.server.v1_16_R1.PacketPlayOutAnimation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -73,7 +72,7 @@ public class PacketUtils {
         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
         WrappedDataWatcher wrappedDataWatcher = new WrappedDataWatcher();
         wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(6,
-                WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass())),
+                        WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass())),
                 stop ? EnumWrappers.EntityPose.STANDING.toNms() : EnumWrappers.EntityPose.CROUCHING.toNms());
 
         packetContainer.getIntegers().write(0, npc.getEntityId());
@@ -85,6 +84,12 @@ public class PacketUtils {
         PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ANIMATION);
         packetContainer.getIntegers().write(0, npc.getEntityId());
         packetContainer.getIntegers().write(1, offHand ? 3 : 0);
+        sendPacket(player, packetContainer);
+    }
+
+    public static void sendEntityDestroy(Player player, NPC npc) {
+        PacketContainer packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+        packetContainer.getIntegerArrays().write(0, new int[]{npc.getEntityId()});
         sendPacket(player, packetContainer);
     }
 
