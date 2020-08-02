@@ -1,6 +1,7 @@
 package tech.folf.seniorteamnpc.npc;
 
 import com.mojang.authlib.GameProfile;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import tech.folf.seniorteamnpc.PacketUtils;

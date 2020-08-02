@@ -4,50 +4,63 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import tech.folf.seniorteamnpc.PacketUtils;
 import tech.folf.seniorteamnpc.SeniorTeamNPC;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NPCManager {
     private final List<NPC> npcList = new ArrayList<>();
 
     public NPCManager() {
-       new BukkitRunnable() {
-           @Override
-           public void run() {
-               for (NPC npc : npcList) {
-                   for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                       if (!npc.getLocation().getWorld().equals(onlinePlayer.getLocation().getWorld())) {
-                           if (npc.getInRadius().contains(onlinePlayer)) npc.destroyToPlayer(onlinePlayer);
-                           continue;
-                       }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (NPC npc : npcList) {
+                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                        if (!npc.getLocation().getWorld().equals(onlinePlayer.getLocation().getWorld())) {
+                            if (npc.getInRadius().contains(onlinePlayer)) npc.destroyToPlayer(onlinePlayer);
+                            continue;
+                        }
 
-                       if (npc.getLocation().distanceSquared(onlinePlayer.getLocation()) < 3600) {
-                           if (!npc.getInRadius().contains(onlinePlayer)) {
-                               npc.spawnToPlayer(onlinePlayer);
-                           }
-                       } else {
-                           if (npc.getInRadius().contains(onlinePlayer)) {
-                               npc.destroyToPlayer(onlinePlayer);
-                           }
-                       }
-                   }
-               }
-           }
-       }.runTaskTimer(SeniorTeamNPC.getInstance(), 0L, 20L);
+                        if (npc.getLocation().distanceSquared(onlinePlayer.getLocation()) < 3600) {
+                            if (!npc.getInRadius().contains(onlinePlayer)) {
+                                npc.spawnToPlayer(onlinePlayer);
+                            }
+                        } else {
+                            if (npc.getInRadius().contains(onlinePlayer)) {
+                                npc.destroyToPlayer(onlinePlayer);
+                            }
+                        }
+                    }
+                }
+            }
+        }.runTaskTimer(SeniorTeamNPC.getInstance(), 0L, 20L);
+    }
+
+    public void registerNpc(NPC npc) {
+        npcList.add(npc);
     }
 
     public void createNpc(Location location, String name) {
         NPC npc = new NPC(name, location);
         npcList.add(npc);
+        SeniorTeamNPC.getInstance().getDataManager().save();
+    }
+
+    public void destroyNpc(NPC npc) {
+        for (Player player : npc.getInRadius()) {
+            PacketUtils.sendEntityDestroy(player, npc);
+        }
     }
 
     public void deleteNpc(NPC npc) {
         npcList.remove(npc);
-        for (Player inRadius : npc.getInRadius()) {
-            npc.destroyToPlayer(inRadius);
-        }
+        destroyNpc(npc);
+        SeniorTeamNPC.getInstance().getDataManager().save();
     }
 
     public NPC get(String name) {

@@ -2,11 +2,13 @@ package tech.folf.seniorteamnpc;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.folf.seniorteamnpc.commands.*;
+import tech.folf.seniorteamnpc.npc.NPC;
 import tech.folf.seniorteamnpc.npc.NPCManager;
 
 public class SeniorTeamNPC extends JavaPlugin {
     private static SeniorTeamNPC instance;
     private static NPCManager npcManager;
+    private DataManager dataManager;
 
     public static NPCManager getNpcManager() {
         return npcManager;
@@ -20,6 +22,8 @@ public class SeniorTeamNPC extends JavaPlugin {
     public void onEnable() {
         instance = this;
         npcManager = new NPCManager();
+        dataManager = new DataManager();
+        dataManager.load();
 
         getCommand("createnpc").setExecutor(new CreateNPCCommand());
         getCommand("crouch").setExecutor(new ActionCommands.CrouchCommand());
@@ -27,5 +31,17 @@ public class SeniorTeamNPC extends JavaPlugin {
         getCommand("npcinfo").setExecutor(new NPCInfoCommand());
         getCommand("listnpcs").setExecutor(new ListNPCCommand());
         getCommand("deletenpc").setExecutor(new DeleteNPCCommand());
+    }
+
+    @Override
+    public void onDisable() {
+        dataManager.save();
+        for (NPC npc : npcManager.getNpcList()) {
+            npcManager.destroyNpc(npc);
+        }
+    }
+
+    public DataManager getDataManager() {
+        return dataManager;
     }
 }
