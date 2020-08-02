@@ -6,11 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import tech.folf.seniorteamnpc.PacketUtils;
 import tech.folf.seniorteamnpc.SeniorTeamNPC;
+import tech.folf.seniorteamnpc.data.ConfigManager;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class NPCManager {
     private final List<NPC> npcList = new ArrayList<>();
@@ -26,7 +25,7 @@ public class NPCManager {
                             continue;
                         }
 
-                        if (npc.getLocation().distanceSquared(onlinePlayer.getLocation()) < 3600) {
+                        if (npc.getLocation().distanceSquared(onlinePlayer.getLocation()) < ConfigManager.viewDistanceSquared) {
                             if (!npc.getInRadius().contains(onlinePlayer)) {
                                 npc.spawnToPlayer(onlinePlayer);
                             }

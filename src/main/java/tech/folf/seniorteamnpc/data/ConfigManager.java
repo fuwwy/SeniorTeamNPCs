@@ -29,6 +29,7 @@ public class ConfigManager {
     public static String alreadyRunning;
     public static String invalidNumber;
     public static String invalidHand;
+    public static int viewDistanceSquared;
     File configurationFile;
     YamlConfiguration configuration;
 
@@ -37,7 +38,7 @@ public class ConfigManager {
 
         Field[] declaredFields = ConfigManager.class.getDeclaredFields();
         for (Field declaredField : declaredFields) {
-            if (Modifier.isStatic(declaredField.getModifiers())) {
+            if (Modifier.isStatic(declaredField.getModifiers()) && declaredField.getType().equals(String.class)) {
                 String key = declaredField.getName();
                 if (!configuration.contains(key)) {
                     SeniorTeamNPC.getInstance().getLogger().severe("Missing configuration key " + key);
@@ -50,6 +51,7 @@ public class ConfigManager {
                 }
             }
         }
+        viewDistanceSquared = (int) Math.pow(configuration.getInt("npcViewDistance"), 2);
     }
 
     private void loadConfigurationFile() {

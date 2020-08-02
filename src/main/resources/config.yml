@@ -14,3 +14,4 @@ notFoundName: "&cCouldn't find an NPC named %s"
 alreadyRunning: '&cNPC %s is already executing an action.'
 invalidNumber: '&c%s is not a valid number.'
 invalidHand: '&c%s is not a valid hand.'
+npcViewDistance: 60
