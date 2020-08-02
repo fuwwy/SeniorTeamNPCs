@@ -1,6 +1,5 @@
 package tech.folf.seniorteamnpc.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import tech.folf.seniorteamnpc.PacketUtils;
 import tech.folf.seniorteamnpc.SeniorTeamNPC;
+import tech.folf.seniorteamnpc.data.ConfigManager;
 import tech.folf.seniorteamnpc.npc.Action;
 import tech.folf.seniorteamnpc.npc.NPC;
 
@@ -19,21 +19,21 @@ public class ActionCommands {
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
             NPC npc;
             if (!(commandSender instanceof Player))
-                commandSender.sendMessage(ChatColor.RED + "This command can only be executed by in-game players.");
+                commandSender.sendMessage(ConfigManager.noConsole);
             else if (!commandSender.hasPermission("seniorteamnpc.crouch"))
-                commandSender.sendMessage(ChatColor.RED + "No permission.");
+                commandSender.sendMessage(ConfigManager.noPermission);
             else if ((npc = SeniorTeamNPC.getNpcManager().getNearestNpc((Player) commandSender)) == null)
-                commandSender.sendMessage(ChatColor.RED + "Couldn't find an NPC near you.");
+                commandSender.sendMessage(ConfigManager.notFound);
             else if (npc.getCurrentAction() != Action.STANDING)
-                commandSender.sendMessage(ChatColor.RED + "NPC " + npc.getName() + " is already executing an action.");
+                commandSender.sendMessage(String.format(ConfigManager.alreadyRunning, npc.getName()));
             else if (strings.length < 1)
-                commandSender.sendMessage(ChatColor.RED + "Missing arguments.");
+                commandSender.sendMessage(ConfigManager.missingArgs);
             else {
                 long interval;
                 try {
                     interval = Long.parseLong(strings[0]);
                 } catch (NumberFormatException e) {
-                    commandSender.sendMessage(ChatColor.RED + strings[1] + " is not a valid number.");
+                    commandSender.sendMessage(String.format(ConfigManager.invalidNumber, strings[0]));
                     return true;
                 }
 
@@ -63,15 +63,15 @@ public class ActionCommands {
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
             NPC npc;
             if (!(commandSender instanceof Player))
-                commandSender.sendMessage(ChatColor.RED + "This command can only be executed by in-game players.");
+                commandSender.sendMessage(ConfigManager.noConsole);
             else if (!commandSender.hasPermission("seniorteamnpc.attack"))
-                commandSender.sendMessage(ChatColor.RED + "No permission.");
+                commandSender.sendMessage(ConfigManager.noPermission);
             else if ((npc = SeniorTeamNPC.getNpcManager().getNearestNpc((Player) commandSender)) == null)
-                commandSender.sendMessage(ChatColor.RED + "Couldn't find an NPC near you.");
+                commandSender.sendMessage(ConfigManager.notFound);
             else if (npc.getCurrentAction() != Action.STANDING)
-                commandSender.sendMessage(ChatColor.RED + "NPC " + npc.getName() + " is already executing an action.");
+                commandSender.sendMessage(String.format(ConfigManager.alreadyRunning, npc.getName()));
             else if (strings.length < 2)
-                commandSender.sendMessage(ChatColor.RED + "Missing arguments.");
+                commandSender.sendMessage(ConfigManager.missingArgs);
             else {
                 boolean offHand;
                 switch (strings[0]) {
@@ -82,7 +82,7 @@ public class ActionCommands {
                         offHand = false;
                         break;
                     default:
-                        commandSender.sendMessage(ChatColor.RED + strings[0] + " is not a valid hand.");
+                        commandSender.sendMessage(String.format(ConfigManager.invalidHand, strings[0]));
                         return true;
                 }
 
@@ -90,7 +90,7 @@ public class ActionCommands {
                 try {
                     interval = Long.parseLong(strings[1]);
                 } catch (NumberFormatException e) {
-                    commandSender.sendMessage(ChatColor.RED + strings[1] + " is not a valid number.");
+                    commandSender.sendMessage(String.format(ConfigManager.invalidNumber, strings[1]));
                     return true;
                 }
 
