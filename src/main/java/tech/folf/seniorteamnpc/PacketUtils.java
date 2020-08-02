@@ -37,8 +37,8 @@ public class PacketUtils {
         structureModifier.write(2, location.getX());
         structureModifier.write(3, location.getY());
         structureModifier.write(4, location.getZ());
-        structureModifier.write(5, (byte) location.getYaw());
-        structureModifier.write(6, (byte) location.getPitch());
+        structureModifier.write(5, (byte) (location.getYaw() * 255F / 360F));
+        structureModifier.write(6, (byte) (location.getPitch() * 255F / 360F));
 
         sendPacket(player, packetContainer);
 
@@ -46,7 +46,7 @@ public class PacketUtils {
         packetContainer = new PacketContainer(PacketType.Play.Server.ENTITY_HEAD_ROTATION);
         structureModifier = packetContainer.getModifier();
         structureModifier.write(0, entityId);
-        structureModifier.write(1, (byte) location.getYaw());
+        structureModifier.write(1, (byte) (location.getYaw() * 255F / 360F));
         sendPacket(player, packetContainer);
     }
 
